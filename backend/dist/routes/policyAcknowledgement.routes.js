@@ -1,0 +1,10 @@
+import { Router } from 'express';
+import { handleCreateAcknowledgement, handleDeleteAcknowledgement, handleGetAcknowledgementById, handleGetAcknowledgements, handleGetAcknowledgementsByEmployee, handleGetAcknowledgementsByPolicy, } from '../controllers/policyAcknowledgement.controller.js';
+const router = Router();
+router.get('/', handleGetAcknowledgements);
+router.get('/employee/:employeeId', handleGetAcknowledgementsByEmployee);
+router.get('/policy/:policyId', handleGetAcknowledgementsByPolicy);
+router.get('/:id', handleGetAcknowledgementById);
+router.post('/', handleCreateAcknowledgement);
+router.delete('/:id', handleDeleteAcknowledgement);
+export default router;

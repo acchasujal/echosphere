@@ -1,0 +1,10 @@
+import { Router } from 'express';
+import { handleCreateReward, handleDeleteReward, handleGetRewardById, handleGetRewards, handleRedeemReward, handleUpdateReward, } from '../controllers/reward.controller.js';
+const router = Router();
+router.get('/', handleGetRewards);
+router.post('/', handleCreateReward);
+router.post('/:id/redeem', handleRedeemReward);
+router.get('/:id', handleGetRewardById);
+router.patch('/:id', handleUpdateReward);
+router.delete('/:id', handleDeleteReward);
+export default router;

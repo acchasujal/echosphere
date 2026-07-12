@@ -139,7 +139,7 @@ export async function handleGetCSRActivities(req: Request, res: Response, next: 
 
 export async function handleGetCSRActivityById(req: Request, res: Response, next: NextFunction) {
   try {
-    const id = parseCSRActivityId(req.params.id);
+    const id = parseCSRActivityId(req.params.id as string);
     const activity = await getCSRActivityById(id);
 
     res.status(200).json({
@@ -187,7 +187,7 @@ export async function handleCreateCSRActivity(req: Request, res: Response, next:
 
 export async function handleUpdateCSRActivity(req: Request, res: Response, next: NextFunction) {
   try {
-    const id = parseCSRActivityId(req.params.id);
+    const id = parseCSRActivityId(req.params.id as string); ;
     const body = req.body as CSRActivityBody;
 
     const data: Record<string, unknown> = {};
@@ -228,7 +228,7 @@ export async function handleUpdateCSRActivity(req: Request, res: Response, next:
 
 export async function handleDeleteCSRActivity(req: Request, res: Response, next: NextFunction) {
   try {
-    const id = parseCSRActivityId(req.params.id);
+    const id = parseCSRActivityId(req.params.id as string);
     const activity = await handleDeleteCSRActivityHelper(id);
 
     res.status(200).json({

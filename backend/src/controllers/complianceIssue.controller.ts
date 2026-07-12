@@ -185,7 +185,7 @@ export async function handleCreateComplianceIssue(req: Request, res: Response, n
 
     const departmentId = getRequiredInteger(body.departmentId, 'departmentId');
     const description = getRequiredString(body.description, 'description');
-    const ownerId = getOwnerId(body, true);
+    const ownerId = getOwnerId(body, true)!;
     const dueDate = getRequiredDate(body.dueDate, 'dueDate');
     const status = body.status !== undefined
       ? normalizeEnumValue(getRequiredString(body.status, 'status'), allowedStatuses, 'status')

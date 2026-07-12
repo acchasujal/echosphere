@@ -134,7 +134,7 @@ export async function handleGetChallenges(_req: Request, res: Response, next: Ne
 
 export async function handleGetChallengeById(req: Request, res: Response, next: NextFunction) {
   try {
-    const id = parseChallengeId(req.params.id);
+    const id = parseChallengeId(req.params.id as string);
     const challenge = await getChallengeById(id);
 
     res.status(200).json({
@@ -178,7 +178,7 @@ export async function handleCreateChallenge(req: Request, res: Response, next: N
 
 export async function handleUpdateChallenge(req: Request, res: Response, next: NextFunction) {
   try {
-    const id = parseChallengeId(req.params.id);
+    const id = parseChallengeId(req.params.id as string);
     const body = req.body as ChallengeBody;
 
     const data: Record<string, string | number | Date> = {};
@@ -232,7 +232,7 @@ export async function handleUpdateChallenge(req: Request, res: Response, next: N
 
 export async function handleDeleteChallenge(req: Request, res: Response, next: NextFunction) {
   try {
-    const id = parseChallengeId(req.params.id);
+    const id = parseChallengeId(req.params.id as string);
     const challenge = await deleteChallenge(id);
 
     res.status(200).json({

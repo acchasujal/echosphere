@@ -1,0 +1,10 @@
+import { Router } from 'express';
+import { handleAwardBadges, handleCreateBadge, handleDeleteBadge, handleGetBadgeById, handleGetBadges, handleUpdateBadge, } from '../controllers/badge.controller.js';
+const router = Router();
+router.get('/', handleGetBadges);
+router.get('/:id', handleGetBadgeById);
+router.post('/', handleCreateBadge);
+router.patch('/:id', handleUpdateBadge);
+router.delete('/:id', handleDeleteBadge);
+router.post('/award/:employeeId', handleAwardBadges);
+export default router;
