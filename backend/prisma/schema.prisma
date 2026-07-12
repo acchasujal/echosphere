@@ -1,0 +1,163 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Department {
+  id   Int    @id @default(autoincrement())
+  name String
+  code String @unique
+
+  employees          Employee[]
+  carbonTransactions CarbonTransaction[]
+  complianceIssues   ComplianceIssue[]
+  score              DepartmentScore?
+}
+
+model Employee {
+  id       Int    @id @default(autoincrement())
+  name     String
+  email    String @unique
+  password String
+  role     String
+
+  xp     Int @default(0)
+  points Int @default(0)
+
+  departmentId Int
+  department   Department @relation(fields: [departmentId], references: [id])
+
+  participations Participation[]
+  badges         EmployeeBadge[]
+  redemptions    RewardRedemption[]
+  notifications  Notification[]
+}
+
+model Challenge {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  xpReward    Int
+  difficulty  String
+  deadline    DateTime
+  status      String
+
+  participations Participation[]
+}
+
+model Participation {
+  id Int @id @default(autoincrement())
+
+  employeeId  Int
+  challengeId Int
+
+  status    String
+  proof     String?
+  xpAwarded Int     @default(0)
+
+  employee  Employee  @relation(fields: [employeeId], references: [id])
+  challenge Challenge @relation(fields: [challengeId], references: [id])
+}
+
+model Reward {
+  id             Int    @id @default(autoincrement())
+  name           String
+  description    String
+  pointsRequired Int
+  stock          Int
+
+  redemptions RewardRedemption[]
+}
+
+model RewardRedemption {
+  id Int @id @default(autoincrement())
+
+  employeeId Int
+  rewardId   Int
+
+  redeemedAt  DateTime @default(now())
+  pointsSpent Int
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+  reward   Reward   @relation(fields: [rewardId], references: [id])
+}
+
+model Badge {
+  id          Int    @id @default(autoincrement())
+  name        String
+  description String
+  xpRequired  Int
+  icon        String
+
+  employees EmployeeBadge[]
+}
+
+model EmployeeBadge {
+  id Int @id @default(autoincrement())
+
+  employeeId Int
+  badgeId    Int
+
+  earnedAt DateTime @default(now())
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+  badge    Badge    @relation(fields: [badgeId], references: [id])
+}
+
+model CarbonTransaction {
+  id Int @id @default(autoincrement())
+
+  departmentId Int
+
+  source    String
+  quantity  Float
+  co2Amount Float
+
+  createdAt DateTime @default(now())
+
+  department Department @relation(fields: [departmentId], references: [id])
+}
+
+model DepartmentScore {
+  id Int @id @default(autoincrement())
+
+  departmentId Int @unique
+
+  environmentalScore Float
+  socialScore        Float
+  governanceScore    Float
+  overallScore       Float
+
+  updatedAt DateTime @updatedAt
+
+  department Department @relation(fields: [departmentId], references: [id])
+}
+
+model ComplianceIssue {
+  id Int @id @default(autoincrement())
+
+  departmentId Int
+
+  description String
+  owner       String
+  dueDate     DateTime
+  status      String
+
+  department Department @relation(fields: [departmentId], references: [id])
+}
+
+model Notification {
+  id Int @id @default(autoincrement())
+
+  employeeId Int
+
+  message String
+  read    Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+}
