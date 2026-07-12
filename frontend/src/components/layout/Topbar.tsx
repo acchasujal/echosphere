@@ -8,6 +8,8 @@ const routeLabels: Record<string, { section: string; page: string }> = {
   '/csr': { section: 'Social', page: 'CSR & Social' },
   '/policies': { section: 'Governance', page: 'Policies & Compliance' },
   '/rewards': { section: 'Gamification', page: 'Rewards & Leaderboard' },
+  '/challenges': { section: 'Gamification', page: 'Challenges' },
+  '/settings': { section: 'Administration', page: 'Settings' },
 };
 
 export const Topbar: React.FC = () => {

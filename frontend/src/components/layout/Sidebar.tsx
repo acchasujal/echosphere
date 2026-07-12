@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Leaf, Users, ShieldCheck, Award, Settings } from 'lucide-react';
+import { LayoutDashboard, Leaf, Users, ShieldCheck, Award, Settings, Target } from 'lucide-react';
 
 const navItems = [
   { name: 'Dashboard', path: '/', icon: LayoutDashboard },
   { name: 'Carbon Tracking', path: '/carbon', icon: Leaf },
   { name: 'CSR & Social', path: '/csr', icon: Users },
   { name: 'Governance', path: '/policies', icon: ShieldCheck },
+  { name: 'Challenges', path: '/challenges', icon: Target },
   { name: 'Gamification', path: '/rewards', icon: Award },
 ];
 
@@ -42,9 +43,12 @@ export const Sidebar: React.FC = () => {
       </nav>
 
       <div className="p-3 border-t border-border">
-        <button className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium text-muted-foreground rounded-md hover:bg-secondary/50 hover:text-foreground transition-colors">
+        <Link
+          to="/settings"
+          className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium text-muted-foreground rounded-md hover:bg-secondary/50 hover:text-foreground transition-colors"
+        >
           <Settings className="w-4 h-4" /> Settings
-        </button>
+        </Link>
       </div>
     </aside>
   );

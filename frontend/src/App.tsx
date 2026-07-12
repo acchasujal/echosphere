@@ -9,6 +9,8 @@ import { CarbonTracking } from './pages/CarbonTracking';
 import { CSR } from './pages/CSR';
 import { Governance } from './pages/Governance';
 import { Rewards } from './pages/Rewards';
+import { Challenges } from './pages/Challenges';
+import { Settings } from './pages/Settings';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,6 +35,8 @@ function App() {
                 <Route path="/csr" element={<CSR />} />
                 <Route path="/policies" element={<Governance />} />
                 <Route path="/rewards" element={<Rewards />} />
+                <Route path="/challenges" element={<Challenges />} />
+                <Route path="/settings" element={<Settings />} />
                 <Route 
                   path="*" 
                   element={
