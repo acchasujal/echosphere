@@ -77,11 +77,34 @@ interface EsgScores {
   overallScore: number;
 }
 
+
+// Custom hook for simple count-up numbers
+const useCountUp = (target: number, duration: number = 800) => {
+  const [count, setCount] = React.useState(0);
+  React.useEffect(() => {
+    let start = 0;
+    const end = target;
+    if (start === end) return;
+    const totalMiliseconds = duration;
+    const incrementTime = Math.max(Math.floor(totalMiliseconds / end), 10);
+    const timer = setInterval(() => {
+      start += 1.5;
+      if (start >= end) {
+        clearInterval(timer);
+        setCount(end);
+      } else {
+        setCount(start);
+      }
+    }, incrementTime);
+    return () => clearInterval(timer);
+  }, [target, duration]);
+  return count;
+};
+
 export const Dashboard: React.FC = () => {
   const { data, isLoading: isLoadingDashboard, error: errorDashboard, refetch: refetchDashboard } = useQuery<DashboardData>({
     queryKey: ['dashboard'],
     queryFn: async () => {
-      // In Express backend, /dashboard is unwrapped
       const response = await api.get('/dashboard');
       return response.data;
     },
@@ -109,7 +132,7 @@ export const Dashboard: React.FC = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {[...Array(4)].map((_, i) => (
-            <Skeleton key={i} className="h-24 w-full" />
+            <Skeleton key={i} className="h-28 w-full" />
           ))}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -143,6 +166,12 @@ export const Dashboard: React.FC = () => {
   const displayEnv = esgScores?.environmentalScore ?? data.environmentalScore;
   const displaySocial = esgScores?.socialScore ?? data.socialScore;
   const displayGov = esgScores?.governanceScore ?? data.governanceScore;
+
+  // Animate values
+  const animatedOverall = useCountUp(displayOverall);
+  const animatedEnv = useCountUp(displayEnv);
+  const animatedSocial = useCountUp(displaySocial);
+  const animatedGov = useCountUp(displayGov);
 
   // Format scores for Radar & Bar Chart
   const chartData = [
@@ -195,23 +224,33 @@ export const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Main Score Metrics */}
+      {/* Main Score Metrics - Premium stands out look */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard 
-          title="Overall ESG Score" 
-          value={displayOverall.toFixed(1)} 
-        />
+        <div className="relative overflow-hidden rounded-lg border border-primary/20 bg-gradient-to-br from-primary/[0.03] to-primary/[0.08] p-5 shadow-sm transition-all hover:shadow-md">
+          <div className="absolute right-3 top-3 h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
+            <span className="text-xs font-bold text-primary">ESG</span>
+          </div>
+          <p className="text-xs font-semibold text-primary uppercase tracking-wider">Overall ESG Score</p>
+          <div className="mt-3 flex items-baseline gap-2">
+            <span className="text-4xl font-extrabold text-foreground tabular-nums font-mono tracking-tight">{animatedOverall.toFixed(1)}</span>
+            <span className="text-xs text-muted-foreground">/ 100</span>
+          </div>
+          <div className="mt-2 w-full bg-secondary h-1 rounded-full overflow-hidden">
+            <div className="bg-primary h-full transition-all duration-1000" style={{ width: `${animatedOverall}%` }} />
+          </div>
+        </div>
+
         <StatCard 
           title="Environmental (E)" 
-          value={displayEnv.toFixed(1)} 
+          value={animatedEnv.toFixed(1)} 
         />
         <StatCard 
           title="Social (S)" 
-          value={displaySocial.toFixed(1)} 
+          value={animatedSocial.toFixed(1)} 
         />
         <StatCard 
           title="Governance (G)" 
-          value={displayGov.toFixed(1)} 
+          value={animatedGov.toFixed(1)} 
         />
       </div>
 
@@ -221,7 +260,7 @@ export const Dashboard: React.FC = () => {
           <ResponsiveContainer width="100%" height="100%">
             <RadarChart cx="50%" cy="50%" outerRadius="80%" data={chartData}>
               <PolarGrid stroke="hsl(var(--border))" />
-              <PolarAngleAxis dataKey="subject" tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }} />
+              <PolarAngleAxis dataKey="subject" tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12, fontWeight: 500 }} />
               <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fill: 'hsl(var(--muted-foreground))' }} />
               <Radar 
                 name="EcoSphere Scores" 
@@ -241,20 +280,22 @@ export const Dashboard: React.FC = () => {
             </div>
           ) : (
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={departmentScoresData}>
-                <XAxis dataKey="name" tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }} />
-                <YAxis domain={[0, 100]} tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }} />
+              <BarChart data={departmentScoresData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                <XAxis dataKey="name" tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }} axisLine={false} tickLine={false} />
+                <YAxis domain={[0, 100]} tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }} axisLine={false} tickLine={false} />
                 <Tooltip 
                   contentStyle={{ 
                     backgroundColor: 'hsl(var(--card))', 
                     borderColor: 'hsl(var(--border))',
-                    borderRadius: '6px'
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
+                    fontSize: '12px'
                   }} 
                 />
-                <Legend verticalAlign="top" height={36} iconType="circle" />
-                <Bar dataKey="E" fill="#2e7d32" name="Environmental" radius={[2, 2, 0, 0]} />
-                <Bar dataKey="S" fill="#0277bd" name="Social" radius={[2, 2, 0, 0]} />
-                <Bar dataKey="G" fill="#f57f17" name="Governance" radius={[2, 2, 0, 0]} />
+                <Legend verticalAlign="top" height={36} iconType="circle" iconSize={8} wrapperStyle={{ fontSize: '11px', fontWeight: 500 }} />
+                <Bar dataKey="E" fill="hsl(142, 71%, 45%)" name="Environmental" radius={[4, 4, 0, 0]} maxBarSize={30} />
+                <Bar dataKey="S" fill="hsl(200, 95%, 40%)" name="Social" radius={[4, 4, 0, 0]} maxBarSize={30} />
+                <Bar dataKey="G" fill="hsl(38, 92%, 50%)" name="Governance" radius={[4, 4, 0, 0]} maxBarSize={30} />
               </BarChart>
             </ResponsiveContainer>
           )}
