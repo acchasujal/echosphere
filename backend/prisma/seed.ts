@@ -5,6 +5,20 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("🌱 Seeding database...");
 
+  // Clean existing database records
+  await prisma.notification.deleteMany();
+  await prisma.employeeBadge.deleteMany();
+  await prisma.badge.deleteMany();
+  await prisma.rewardRedemption.deleteMany();
+  await prisma.reward.deleteMany();
+  await prisma.participation.deleteMany();
+  await prisma.challenge.deleteMany();
+  await prisma.employee.deleteMany();
+  await prisma.carbonTransaction.deleteMany();
+  await prisma.departmentScore.deleteMany();
+  await prisma.complianceIssue.deleteMany();
+  await prisma.department.deleteMany();
+
   // -----------------------
   // Departments
   // -----------------------

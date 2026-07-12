@@ -141,6 +141,13 @@ export async function redeemReward(rewardId: number, employeeId: number) {
       },
     });
 
+    await transaction.notification.create({
+      data: {
+        employeeId,
+        message: '🎁 Reward redeemed successfully.',
+      },
+    });
+
     return redemption;
   });
 }

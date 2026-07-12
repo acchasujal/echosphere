@@ -128,7 +128,7 @@ export async function awardEligibleBadgesToEmployee(
   const [eligibleBadges, alreadyEarned] = await Promise.all([
     prisma.badge.findMany({
       where: { xpRequired: { lte: employee.xp } },
-      select: { id: true },
+      select: { id: true, name: true },
     }),
     prisma.employeeBadge.findMany({
       where: { employeeId },
@@ -137,19 +137,25 @@ export async function awardEligibleBadgesToEmployee(
   ]);
 
   const earnedBadgeIds = new Set(alreadyEarned.map((eb) => eb.badgeId));
-  const newBadgeIds = eligibleBadges
-    .map((b) => b.id)
-    .filter((id) => !earnedBadgeIds.has(id));
+  const newBadges = eligibleBadges.filter((b) => !earnedBadgeIds.has(b.id));
 
-  if (newBadgeIds.length === 0) {
+  if (newBadges.length === 0) {
     return { awarded: [] };
   }
 
-  await Promise.all(
-    newBadgeIds.map((badgeId) =>
-      prisma.employeeBadge.create({ data: { employeeId, badgeId } }),
+  await Promise.all([
+    ...newBadges.map((badge) =>
+      prisma.employeeBadge.create({ data: { employeeId, badgeId: badge.id } }),
     ),
-  );
+    ...newBadges.map((badge) =>
+      prisma.notification.create({
+        data: {
+          employeeId,
+          message: `🏆 Congratulations! You earned the ${badge.name} badge.`,
+        },
+      }),
+    ),
+  ]);
 
-  return { awarded: newBadgeIds };
+  return { awarded: newBadges.map((b) => b.id) };
 }

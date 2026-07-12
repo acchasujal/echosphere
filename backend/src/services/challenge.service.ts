@@ -71,6 +71,23 @@ export async function createChallenge(data: ChallengeCreateInput) {
       include: challengeInclude,
     });
 
+    const employees = await prisma.employee.findMany({
+      select: { id: true },
+    });
+
+    if (employees.length > 0) {
+      await Promise.all(
+        employees.map((emp) =>
+          prisma.notification.create({
+            data: {
+              employeeId: emp.id,
+              message: `New challenge: ${challenge.title}`,
+            },
+          }),
+        ),
+      );
+    }
+
     return sanitizeChallenge(challenge);
   } catch (error) {
     mapPrismaError(error);

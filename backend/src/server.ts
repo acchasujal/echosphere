@@ -7,6 +7,7 @@ import challengeRoutes from './routes/challenge.routes.js';
 import employeeRoutes from './routes/employee.routes.js';
 import participationRoutes from './routes/participation.routes.js';
 import rewardRoutes from './routes/reward.routes.js';
+import notificationRoutes from './routes/notification.routes.js';
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use('/dashboard', dashboardRoutes);
 app.use('/carbon-transactions', carbonTransactionRoutes);
 app.use('/participations', participationRoutes);
 app.use('/badges', badgeRoutes);
+app.use('/notifications', notificationRoutes);
 
 app.use((_req, res) => {
   res.status(404).json({

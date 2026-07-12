@@ -50,7 +50,7 @@ async function evaluateAndAwardBadges(
   const [eligibleBadges, alreadyEarned] = await Promise.all([
     tx.badge.findMany({
       where: { xpRequired: { lte: updatedXp } },
-      select: { id: true },
+      select: { id: true, name: true },
     }),
     tx.employeeBadge.findMany({
       where: { employeeId },
@@ -59,21 +59,27 @@ async function evaluateAndAwardBadges(
   ]);
 
   const earnedBadgeIds = new Set(alreadyEarned.map((eb) => eb.badgeId));
-  const newBadgeIds = eligibleBadges
-    .map((b) => b.id)
-    .filter((id) => !earnedBadgeIds.has(id));
+  const newBadges = eligibleBadges.filter((b) => !earnedBadgeIds.has(b.id));
 
-  if (newBadgeIds.length === 0) {
+  if (newBadges.length === 0) {
     return;
   }
 
-  await Promise.all(
-    newBadgeIds.map((badgeId) =>
+  await Promise.all([
+    ...newBadges.map((badge) =>
       tx.employeeBadge.create({
-        data: { employeeId, badgeId },
+        data: { employeeId, badgeId: badge.id },
       }),
     ),
-  );
+    ...newBadges.map((badge) =>
+      tx.notification.create({
+        data: {
+          employeeId,
+          message: `🏆 Congratulations! You earned the ${badge.name} badge.`,
+        },
+      }),
+    ),
+  ]);
 }
 
 export async function getAllParticipations(): Promise<ParticipationWithRelations[]> {
@@ -197,6 +203,13 @@ export async function updateParticipation(
         source: `challenge_completion:${participation.challenge.id}`,
         quantity: 1,
         co2Amount: 0,
+      },
+    });
+
+    await tx.notification.create({
+      data: {
+        employeeId: participation.employee.id,
+        message: '🌱 Challenge completed successfully.',
       },
     });
 
