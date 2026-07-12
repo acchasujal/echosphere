@@ -77,6 +77,20 @@ interface EsgScores {
   overallScore: number;
 }
 
+interface DashboardInsights {
+  generatedAt: string;
+  overallSummary: string;
+  environmentalAnalysis: string;
+  socialAnalysis: string;
+  governanceAnalysis: string;
+  strengths: string[];
+  weaknesses: string[];
+  priorityActions: string[];
+  riskLevel: 'low' | 'medium' | 'high';
+  priorityDepartment: string;
+  executiveSummary: string;
+}
+
 
 // Custom hook for simple count-up numbers
 const useCountUp = (target: number, duration: number = 800) => {
@@ -118,8 +132,16 @@ export const Dashboard: React.FC = () => {
     },
   });
 
-  const isLoading = isLoadingDashboard || isLoadingEsg;
-  const error = errorDashboard;
+  const { data: aiInsights, isLoading: isLoadingAI, error: errorAI } = useQuery<DashboardInsights>({
+    queryKey: ['ai-insights'],
+    queryFn: async () => {
+      const response = await api.get('/dashboard-insights');
+      return response.data.data || response.data;
+    },
+  });
+
+  const isLoading = isLoadingDashboard || isLoadingEsg || isLoadingAI;
+  const error = errorDashboard || errorAI;
   const refetch = () => {
     refetchDashboard();
   };
@@ -214,14 +236,80 @@ export const Dashboard: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-bold tracking-tight text-foreground">Overview</h1>
           <p className="text-xs text-muted-foreground mt-0.5">Corporate sustainability and ESG performance metrics.</p>
         </div>
+        {aiInsights && (
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider">AI Risk:</span>
+            <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border
+              ${aiInsights.riskLevel === 'high' ? 'bg-red-50 text-red-700 border-red-200' :
+                aiInsights.riskLevel === 'medium' ? 'bg-amber-50 text-amber-700 border-amber-200' :
+                'bg-emerald-50 text-emerald-700 border-emerald-200'}`}>
+              {aiInsights.riskLevel}
+            </span>
+          </div>
+        )}
       </div>
+
+      {/* AI Insights Digest Panel */}
+      {aiInsights && (
+        <Card className="p-5 border border-primary/10 bg-gradient-to-r from-primary/[0.01] to-primary/[0.03] space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-1.5">
+              <svg className="w-4 h-4 text-primary animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              </svg>
+              Executive AI Insights & Action Digest
+            </h2>
+            <span className="text-[10px] text-muted-foreground font-mono">Generated: {new Date(aiInsights.generatedAt).toLocaleDateString()}</span>
+          </div>
+          <p className="text-xs text-foreground/90 leading-relaxed font-medium">{aiInsights.executiveSummary}</p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+            <div className="space-y-1 bg-card/60 p-3 rounded-lg border border-border/60">
+              <h3 className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Strengths</h3>
+              {aiInsights.strengths.length === 0 ? (
+                <p className="text-[10px] text-muted-foreground italic">No strengths highlighted</p>
+              ) : (
+                <ul className="list-disc list-inside space-y-0.5 text-[11px] text-foreground/80 font-medium">
+                  {aiInsights.strengths.map((str, idx) => (
+                    <li key={idx}>{str}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <div className="space-y-1 bg-card/60 p-3 rounded-lg border border-border/60">
+              <h3 className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Weaknesses</h3>
+              {aiInsights.weaknesses.length === 0 ? (
+                <p className="text-[10px] text-muted-foreground italic">No core weaknesses detected</p>
+              ) : (
+                <ul className="list-disc list-inside space-y-0.5 text-[11px] text-foreground/80 font-medium font-semibold text-red-700">
+                  {aiInsights.weaknesses.map((weak, idx) => (
+                    <li key={idx} className="text-red-700">{weak}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <div className="space-y-1 bg-card/60 p-3 rounded-lg border border-border/60">
+              <h3 className="text-[10px] font-bold text-primary uppercase tracking-wider">Priority Actions</h3>
+              {aiInsights.priorityActions.length === 0 ? (
+                <p className="text-[10px] text-muted-foreground italic">No immediate actions needed</p>
+              ) : (
+                <ul className="list-disc list-inside space-y-0.5 text-[11px] text-foreground/80 font-medium">
+                  {aiInsights.priorityActions.map((act, idx) => (
+                    <li key={idx} className="text-primary-hover">{act}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+        </Card>
+      )}
 
       {/* Main Score Metrics - Premium stands out look */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
