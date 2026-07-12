@@ -8,6 +8,7 @@ import { EmptyState } from './components/ui/Feedback';
 import { Dashboard } from './pages/Dashboard';
 import { CarbonTracking } from './pages/CarbonTracking';
 import { CSR } from './pages/CSR';
+import { Governance } from './pages/Governance';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -38,15 +39,7 @@ function App() {
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/carbon" element={<CarbonTracking />} />
                 <Route path="/csr" element={<CSR />} />
-                <Route 
-                  path="/policies" 
-                  element={
-                    <ComingSoon 
-                      title="Governance Coming Soon" 
-                      description="Policy checklists, compliance issues, and governance dashboards will be implemented in the next phase." 
-                    />
-                  } 
-                />
+                <Route path="/policies" element={<Governance />} />
                 <Route 
                   path="/rewards" 
                   element={
