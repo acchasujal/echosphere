@@ -40,11 +40,20 @@ interface ComplianceIssue {
   };
 }
 
+interface Audit {
+  id: number;
+  title: string;
+  description: string;
+  auditDate: string;
+  status: string;
+}
+
 export const Governance: React.FC = () => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const [isPolicyFormOpen, setIsPolicyFormOpen] = useState(false);
   const [isIssueFormOpen, setIsIssueFormOpen] = useState(false);
+  const [isAuditFormOpen, setIsAuditFormOpen] = useState(false);
 
   // Policy Form State
   const [policyTitle, setPolicyTitle] = useState('');
@@ -57,6 +66,13 @@ export const Governance: React.FC = () => {
   const [issueDeptId, setIssueDeptId] = useState('');
   const [issueDueDate, setIssueDueDate] = useState('');
   const [issueError, setIssueError] = useState('');
+
+  // Audit Form State
+  const [auditTitle, setAuditTitle] = useState('');
+  const [auditDesc, setAuditDesc] = useState('');
+  const [auditDateVal, setAuditDateVal] = useState('');
+  const [auditStatus, setAuditStatus] = useState('SCHEDULED');
+  const [auditError, setAuditError] = useState('');
 
   // 1. Fetch Employees (to use first employee as the logged-in employee, and for owner selection)
   const { data: employees = [] } = useQuery<Employee[]>({
@@ -93,6 +109,15 @@ export const Governance: React.FC = () => {
     queryKey: ['compliance-issues'],
     queryFn: async () => {
       const res = await api.get('/compliance-issues');
+      return res.data.data || res.data || [];
+    },
+  });
+
+  // 5. Fetch Audits
+  const { data: audits = [], isLoading: isLoadingAudits } = useQuery<Audit[]>({
+    queryKey: ['audits'],
+    queryFn: async () => {
+      const res = await api.get('/audits');
       return res.data.data || res.data || [];
     },
   });
@@ -180,6 +205,26 @@ export const Governance: React.FC = () => {
     },
   });
 
+  const createAuditMutation = useMutation({
+    mutationFn: async (newAudit: { title: string; description: string; auditDate: string; status: string }) => {
+      const res = await api.post('/audits', newAudit);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['audits'] });
+      toast('Audit record created successfully.', 'success');
+      setIsAuditFormOpen(false);
+      setAuditTitle('');
+      setAuditDesc('');
+      setAuditDateVal('');
+      setAuditStatus('SCHEDULED');
+      setAuditError('');
+    },
+    onError: (err: any) => {
+      toast(err.message || 'Failed to create audit.', 'error');
+    },
+  });
+
   const handlePolicySubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setPolicyError('');
@@ -206,6 +251,21 @@ export const Governance: React.FC = () => {
       description: issueDesc.trim(),
       ownerId: parseInt(issueOwnerId),
       dueDate: new Date(issueDueDate).toISOString(),
+    });
+  };
+
+  const handleAuditSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setAuditError('');
+    if (!auditTitle.trim()) return setAuditError('Title is required.');
+    if (!auditDesc.trim()) return setAuditError('Description is required.');
+    if (!auditDateVal) return setAuditError('Audit date is required.');
+
+    createAuditMutation.mutate({
+      title: auditTitle.trim(),
+      description: auditDesc.trim(),
+      auditDate: new Date(auditDateVal).toISOString(),
+      status: auditStatus,
     });
   };
 
@@ -265,7 +325,7 @@ export const Governance: React.FC = () => {
     }
   ];
 
-  if (isLoadingPolicies || isLoadingIssues) {
+  if (isLoadingPolicies || isLoadingIssues || isLoadingAudits) {
     return (
       <div className="space-y-6">
         <Skeleton className="h-8 w-48" />
@@ -297,6 +357,9 @@ export const Governance: React.FC = () => {
           <p className="text-xs text-muted-foreground mt-0.5">Manage sustainability compliance guidelines, ESG policies, and audits.</p>
         </div>
         <div className="flex gap-2">
+          <Button variant="secondary" onClick={() => setIsAuditFormOpen(!isAuditFormOpen)}>
+            {isAuditFormOpen ? 'Close Audit Panel' : 'Schedule Audit'}
+          </Button>
           <Button variant="secondary" onClick={() => setIsIssueFormOpen(!isIssueFormOpen)}>
             {isIssueFormOpen ? 'Close Issue Panel' : 'Log Compliance Issue'}
           </Button>
@@ -324,6 +387,54 @@ export const Governance: React.FC = () => {
           positive={acknowledgedPolicyIds.size === policies.length}
         />
       </div>
+
+      {/* Schedule Audit Form */}
+      {isAuditFormOpen && (
+        <Card className="p-5 animate-fade-in border-primary/20 bg-primary/[0.01]">
+          <h2 className="text-sm font-semibold text-foreground mb-4">Schedule Compliance Audit</h2>
+          <form onSubmit={handleAuditSubmit} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-muted-foreground">Audit Title / Scope</label>
+                <Input
+                  type="text"
+                  placeholder="e.g. Q3 Carbon Emissions Audit"
+                  value={auditTitle}
+                  onChange={(e) => setAuditTitle(e.target.value)}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-muted-foreground">Audit Date</label>
+                <Input
+                  type="date"
+                  value={auditDateVal}
+                  onChange={(e) => setAuditDateVal(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-muted-foreground">Audit Focus & Expectations</label>
+              <textarea
+                placeholder="Details of audit parameters, departments covered, and compliance expectations..."
+                value={auditDesc}
+                onChange={(e) => setAuditDesc(e.target.value)}
+                className="flex w-full rounded-md border border-input bg-card px-3 py-2 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0 min-h-[80px]"
+              />
+            </div>
+            <div className="flex items-center justify-between border-t border-border pt-4 mt-2">
+              <span className="text-xs text-destructive">{auditError}</span>
+              <div className="flex gap-2">
+                <Button type="button" variant="ghost" onClick={() => setIsAuditFormOpen(false)}>
+                  Cancel
+                </Button>
+                <Button type="submit" loading={createAuditMutation.isPending}>
+                  {createAuditMutation.isPending ? 'Scheduling...' : 'Schedule Audit'}
+                </Button>
+              </div>
+            </div>
+          </form>
+        </Card>
+      )}
 
       {/* Publish Policy Form */}
       {isPolicyFormOpen && (
@@ -476,12 +587,37 @@ export const Governance: React.FC = () => {
           )}
         </div>
 
-        {/* Compliance Issues Column */}
-        <div className="lg:col-span-2 space-y-3">
-          <h2 className="text-sm font-semibold text-foreground flex items-center gap-1.5">
-            <AlertTriangle className="w-4 h-4 text-muted-foreground" /> Compliance Register
-          </h2>
-          <DataTable columns={issueColumns} data={complianceIssues} />
+        {/* Compliance Issues and Audits Columns */}
+        <div className="lg:col-span-2 space-y-6">
+          <div className="space-y-3">
+            <h2 className="text-sm font-semibold text-foreground flex items-center gap-1.5">
+              <AlertTriangle className="w-4 h-4 text-muted-foreground" /> Compliance Register
+            </h2>
+            <DataTable columns={issueColumns} data={complianceIssues} />
+          </div>
+
+          <div className="space-y-3 pt-2">
+            <h2 className="text-sm font-semibold text-foreground flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-muted-foreground" /> Active & Scheduled Audits
+            </h2>
+            <DataTable
+              columns={[
+                { header: 'Audit Scope', accessor: 'title' },
+                { header: 'Focus & Targets', accessor: 'description' },
+                { header: 'Audit Date', accessor: (row: any) => new Date(row.auditDate).toLocaleDateString() },
+                { 
+                  header: 'Status', 
+                  accessor: (row: any) => (
+                    <span className={`inline-flex px-2 py-0.5 rounded text-[10px] font-semibold
+                      ${row.status === 'COMPLETED' ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-amber-50 text-amber-800 border border-amber-200'}`}>
+                      {row.status}
+                    </span>
+                  ) 
+                }
+              ]}
+              data={audits}
+            />
+          </div>
         </div>
       </div>
     </div>
