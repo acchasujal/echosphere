@@ -3,6 +3,7 @@ import { handleError } from './controllers/employee.controller.js';
 import dashboardRoutes from './routes/dashboard.routes.js';
 import challengeRoutes from './routes/challenge.routes.js';
 import employeeRoutes from './routes/employee.routes.js';
+import rewardRoutes from './routes/reward.routes.js';
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.get('/health', (_req, res) => {
 
 app.use('/employees', employeeRoutes);
 app.use('/challenges', challengeRoutes);
+app.use('/rewards', rewardRoutes);
 app.use('/dashboard', dashboardRoutes);
 
 app.use((_req, res) => {
