@@ -13,8 +13,8 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
         <Topbar />
         
         {/* Main Content Area: Scrollable, padded */}
-        <main className="flex-1 overflow-y-auto p-6 bg-muted/30 animate-fade-in">
-          <div className="mx-auto max-w-7xl space-y-6">
+        <main className="flex-1 overflow-y-auto p-6 bg-muted/30 transition-all duration-300 ease-in-out">
+          <div className="mx-auto max-w-7xl space-y-6 animate-fade-in">
             {children}
           </div>
         </main>

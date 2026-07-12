@@ -4,7 +4,7 @@ export const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDi
   ({ className = '', ...props }, ref) => (
     <div
       ref={ref}
-      className={`bg-card border border-border rounded-lg shadow-xs p-5 ${className}`}
+      className={`bg-card border border-border rounded-lg shadow-xs p-5 transition-all duration-200 hover:shadow-sm ${className}`}
       {...props}
     />
   )
@@ -26,12 +26,12 @@ export const CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttrib
 CardTitle.displayName = 'CardTitle';
 
 export const StatCard: React.FC<{ title: string; value: string; delta?: string; positive?: boolean }> = ({ title, value, delta, positive }) => (
-  <Card className="p-4 flex flex-col gap-2">
-    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{title}</p>
-    <div className="flex items-baseline gap-2">
-      <span className="text-2xl font-semibold text-foreground tabular-nums font-mono">{value}</span>
+  <Card className="p-4 flex flex-col gap-2 transition-all duration-200 hover:translate-y-[-2px] hover:border-primary/20">
+    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">{title}</p>
+    <div className="flex items-baseline justify-between">
+      <span className="text-2xl font-bold text-foreground tabular-nums font-mono">{value}</span>
       {delta && (
-        <span className={`text-xs font-medium ${positive ? 'text-success' : 'text-destructive'}`}>
+        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded ${positive ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'}`}>
           {positive ? '↑' : '↓'} {delta}
         </span>
       )}

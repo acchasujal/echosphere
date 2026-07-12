@@ -1,28 +1,23 @@
 import React from 'react';
 
-interface Column<T> {
+interface Column {
   header: string;
-  accessor: keyof T | string | ((row: T) => React.ReactNode);
+  accessor: string | ((row: any) => React.ReactNode);
   className?: string;
   align?: 'left' | 'right' | 'center';
 }
 
-interface DataTableProps<T> {
-  columns: Column<T>[];
-  data: T[];
-}
-
-export const DataTable = <T extends Record<string, any>>({ columns, data }: DataTableProps<T>) => {
+export const DataTable: React.FC<{ columns: Column[]; data: any[] }> = ({ columns, data }) => {
   return (
-    <div className="border border-border rounded-lg overflow-hidden bg-card">
+    <div className="border border-border rounded-lg overflow-hidden bg-card shadow-xs transition-all duration-200">
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="bg-muted/50 border-b border-border">
+          <thead className="bg-muted/40 border-b border-border">
             <tr>
               {columns.map((col, idx) => (
                 <th
                   key={idx}
-                  className={`px-4 py-2.5 text-xs font-medium text-muted-foreground uppercase tracking-wider
+                  className={`px-4 py-3 text-[10px] font-bold text-muted-foreground uppercase tracking-wider
                     ${col.align === 'right' ? 'text-right' : col.align === 'center' ? 'text-center' : 'text-left'}
                     ${col.className || ''}`}
                 >
@@ -32,30 +27,20 @@ export const DataTable = <T extends Record<string, any>>({ columns, data }: Data
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
-            {data.length === 0 ? (
-              <tr>
-                <td colSpan={columns.length} className="px-4 py-8 text-center text-muted-foreground text-xs">
-                  No records found.
-                </td>
+            {data.map((row, rowIdx) => (
+              <tr key={rowIdx} className="hover:bg-muted/40 transition-colors duration-150 group">
+                {columns.map((col, colIdx) => (
+                  <td
+                    key={colIdx}
+                    className={`px-4 py-3 text-xs text-foreground/90 font-medium
+                      ${col.align === 'right' ? 'text-right tabular-nums' : col.align === 'center' ? 'text-center' : 'text-left'}
+                      ${col.className || ''}`}
+                  >
+                    {typeof col.accessor === 'function' ? col.accessor(row) : row[col.accessor]}
+                  </td>
+                ))}
               </tr>
-            ) : (
-              data.map((row, rowIdx) => (
-                <tr key={rowIdx} className="hover:bg-muted/30 transition-colors">
-                  {columns.map((col, colIdx) => (
-                    <td
-                      key={colIdx}
-                      className={`px-4 py-2.5 text-foreground 
-                        ${col.align === 'right' ? 'text-right tabular-nums' : col.align === 'center' ? 'text-center' : 'text-left'}
-                        ${col.className || ''}`}
-                    >
-                      {typeof col.accessor === 'function' 
-                        ? col.accessor(row) 
-                        : (row[col.accessor as keyof T] as React.ReactNode)}
-                    </td>
-                  ))}
-                </tr>
-              ))
-            )}
+            ))}
           </tbody>
         </table>
       </div>

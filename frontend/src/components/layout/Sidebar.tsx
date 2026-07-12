@@ -31,8 +31,8 @@ export const Sidebar: React.FC = () => {
             <Link
               key={item.name}
               to={item.path}
-              className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors
-                ${isActive ? 'bg-secondary text-secondary-foreground' : 'text-muted-foreground hover:bg-secondary/50 hover:text-foreground'}`}
+              className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-all duration-200
+                ${isActive ? 'bg-secondary text-secondary-foreground shadow-xs font-semibold' : 'text-muted-foreground hover:bg-secondary/55 hover:text-foreground hover:translate-x-1'}`}
             >
               <item.icon className="w-4 h-4 shrink-0" />
               {item.name}

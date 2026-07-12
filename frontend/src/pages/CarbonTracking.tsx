@@ -331,7 +331,7 @@ export const CarbonTracking: React.FC = () => {
                 <Button type="button" variant="ghost" onClick={resetForm}>
                   Reset
                 </Button>
-                <Button type="submit" disabled={createMutation.isPending}>
+                <Button type="submit" loading={createMutation.isPending}>
                   {createMutation.isPending ? 'Saving...' : 'Submit Transaction'}
                 </Button>
               </div>

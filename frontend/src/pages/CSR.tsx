@@ -215,7 +215,7 @@ export const CSR: React.FC = () => {
                 <Button type="button" variant="ghost" onClick={resetForm}>
                   Reset
                 </Button>
-                <Button type="submit" disabled={createMutation.isPending}>
+                <Button type="submit" loading={createMutation.isPending}>
                   {createMutation.isPending ? 'Creating...' : 'Create Activity'}
                 </Button>
               </div>

@@ -236,6 +236,7 @@ export const Rewards: React.FC = () => {
         </div>
         <Button 
           onClick={() => evaluateBadgesMutation.mutate()} 
+          loading={evaluateBadgesMutation.isPending}
           disabled={evaluateBadgesMutation.isPending || !currentUser}
           className="flex items-center gap-2"
         >
@@ -277,10 +278,12 @@ export const Rewards: React.FC = () => {
               {badges.map((badge) => {
                 const isEarned = badge.employees?.some(eb => eb.employeeId === currentUser?.id);
                 return (
-                  <Card key={badge.id} className={`p-4 flex gap-3 items-center border
-                    ${isEarned ? 'border-primary/20 bg-primary/[0.01]' : 'border-border'}`}>
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0
-                      ${isEarned ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
+                  <Card key={badge.id} className={`p-4 flex gap-3 items-center border transition-all duration-200
+                    ${isEarned 
+                      ? 'border-primary/20 bg-primary/[0.01] hover:shadow-xs' 
+                      : 'border-border opacity-65 bg-secondary/20 hover:opacity-85'}`}>
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 transition-transform duration-300
+                      ${isEarned ? 'bg-primary text-primary-foreground scale-100 rotate-0' : 'bg-muted text-muted-foreground scale-95'}`}>
                       <Award className="w-6 h-6" />
                     </div>
                     <div className="flex-1 min-w-0">
