@@ -6,6 +6,7 @@ import { ToastProvider } from './components/ui/Toast';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
 import { EmptyState } from './components/ui/Feedback';
 import { Dashboard } from './pages/Dashboard';
+import { CarbonTracking } from './pages/CarbonTracking';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -34,15 +35,7 @@ function App() {
             <AppShell>
               <Routes>
                 <Route path="/" element={<Dashboard />} />
-                <Route 
-                  path="/carbon" 
-                  element={
-                    <ComingSoon 
-                      title="Carbon Tracking Coming Soon" 
-                      description="The carbon emission logging flow and transaction ledger will be implemented in the next phase." 
-                    />
-                  } 
-                />
+                <Route path="/carbon" element={<CarbonTracking />} />
                 <Route 
                   path="/csr" 
                   element={
