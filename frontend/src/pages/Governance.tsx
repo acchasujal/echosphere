@@ -282,6 +282,13 @@ export const Governance: React.FC = () => {
       header: 'Department', 
       accessor: (row: ComplianceIssue) => row.department?.name || `Dept ${row.departmentId}` 
     },
+    {
+      header: 'Owner',
+      accessor: (row: any) => {
+        const emp = employees.find(e => e.id === Number(row.owner) || e.id === row.ownerId);
+        return emp ? emp.name : `Employee ID ${row.owner || row.ownerId}`;
+      }
+    },
     { 
       header: 'Due Date', 
       accessor: (row: ComplianceIssue) => {
