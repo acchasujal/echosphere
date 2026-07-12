@@ -124,7 +124,7 @@ export const Dashboard: React.FC = () => {
     },
   });
 
-  const { data: esgScores, isLoading: isLoadingEsg } = useQuery<EsgScores>({
+  const { data: esgScores, isLoading: isLoadingEsg, refetch: refetchEsg } = useQuery<EsgScores>({
     queryKey: ['esg-scores'],
     queryFn: async () => {
       const response = await api.get('/dashboard/esg');
@@ -132,10 +132,10 @@ export const Dashboard: React.FC = () => {
     },
   });
 
-  const { data: aiInsights, isLoading: isLoadingAI, error: errorAI } = useQuery<DashboardInsights>({
+  const { data: aiInsights, isLoading: isLoadingAI, error: errorAI, refetch: refetchAI } = useQuery<DashboardInsights>({
     queryKey: ['ai-insights'],
     queryFn: async () => {
-      const response = await api.get('/dashboard-insights');
+      const response = await api.get('/dashboard/insights');
       return response.data.data || response.data;
     },
   });
@@ -144,6 +144,8 @@ export const Dashboard: React.FC = () => {
   const error = errorDashboard || errorAI;
   const refetch = () => {
     refetchDashboard();
+    refetchEsg();
+    refetchAI();
   };
 
   const displayOverall = esgScores?.overallScore ?? data?.overallScore ?? 0;
