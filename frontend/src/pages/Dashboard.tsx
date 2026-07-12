@@ -200,26 +200,18 @@ export const Dashboard: React.FC = () => {
         <StatCard 
           title="Overall ESG Score" 
           value={displayOverall.toFixed(1)} 
-          delta="1.2" 
-          positive={true} 
         />
         <StatCard 
           title="Environmental (E)" 
           value={displayEnv.toFixed(1)} 
-          delta="0.5" 
-          positive={true} 
         />
         <StatCard 
           title="Social (S)" 
           value={displaySocial.toFixed(1)} 
-          delta="2.1" 
-          positive={true} 
         />
         <StatCard 
           title="Governance (G)" 
           value={displayGov.toFixed(1)} 
-          delta="0.0" 
-          positive={true} 
         />
       </div>
 
@@ -243,23 +235,29 @@ export const Dashboard: React.FC = () => {
         </ChartContainer>
 
         <ChartContainer title="Department Score Comparison">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={departmentScoresData}>
-              <XAxis dataKey="name" tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }} />
-              <YAxis domain={[0, 100]} tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }} />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: 'hsl(var(--card))', 
-                  borderColor: 'hsl(var(--border))',
-                  borderRadius: '6px'
-                }} 
-              />
-              <Legend verticalAlign="top" height={36} iconType="circle" />
-              <Bar dataKey="E" fill="#2e7d32" name="E" radius={[2, 2, 0, 0]} />
-              <Bar dataKey="S" fill="#0277bd" name="S" radius={[2, 2, 0, 0]} />
-              <Bar dataKey="G" fill="#f57f17" name="G" radius={[2, 2, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
+          {departmentScoresData.length === 0 ? (
+            <div className="h-full flex items-center justify-center text-xs text-muted-foreground">
+              No department scores available yet.
+            </div>
+          ) : (
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={departmentScoresData}>
+                <XAxis dataKey="name" tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }} />
+                <YAxis domain={[0, 100]} tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }} />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: 'hsl(var(--card))', 
+                    borderColor: 'hsl(var(--border))',
+                    borderRadius: '6px'
+                  }} 
+                />
+                <Legend verticalAlign="top" height={36} iconType="circle" />
+                <Bar dataKey="E" fill="#2e7d32" name="Environmental" radius={[2, 2, 0, 0]} />
+                <Bar dataKey="S" fill="#0277bd" name="Social" radius={[2, 2, 0, 0]} />
+                <Bar dataKey="G" fill="#f57f17" name="Governance" radius={[2, 2, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          )}
         </ChartContainer>
       </div>
 
@@ -273,11 +271,12 @@ export const Dashboard: React.FC = () => {
 
         {/* Sidebar Lists: Leaders & Stats */}
         <div className="space-y-6">
-          {/* Top Employees Leaderboard */}
           <div className="space-y-3">
             <h2 className="text-sm font-semibold text-foreground">Top Contributors</h2>
             <Card className="p-4 space-y-3">
-              {data.topEmployees.map((emp, index) => (
+              {data.topEmployees.length === 0 ? (
+                <p className="text-xs text-muted-foreground text-center py-4">No employees yet.</p>
+              ) : data.topEmployees.map((emp, index) => (
                 <div key={emp.id} className="flex items-center justify-between text-sm">
                   <div className="flex items-center gap-2.5">
                     <span className="text-xs font-bold text-muted-foreground w-4">{index + 1}</span>

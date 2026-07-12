@@ -1,62 +1,154 @@
 # EcoSphere — ESG Management & Gamification Platform
 
-EcoSphere is a comprehensive ESG (Environmental, Social, Governance) management platform designed to help organizations monitor, analyze, and reward corporate sustainability efforts. It automates carbon emission tracking, incentivizes community service participation, validates policy governance compliance, and engages employees through a gamified badging and rewards engine.
+EcoSphere is a full-stack ESG (Environmental, Social, Governance) management platform built for the **Odoo Grand Finale Hackathon 2026**. It helps organizations monitor corporate sustainability, track carbon emissions, incentivize employee participation through gamification, and govern policy compliance — all in a single polished SaaS interface.
+
+> ⚡ **AI-Assisted Development** — This project was built with AI-assisted code generation and reviewed by the team for correctness and design quality.
 
 ---
 
-## Technical Architecture
+## ✅ Implemented Features
 
-*   **Backend:** Node.js, Express, TypeScript, Prisma, PostgreSQL
-*   **Frontend:** React 18, Vite, TypeScript, Tailwind CSS, shadcn/ui (Planned/Work in Progress)
-*   **Database:** PostgreSQL with Prisma Client for schema definition and migrations.
+### Dashboard
+- Real-time ESG score computation (Environmental, Social, Governance)
+- Department-level ESG breakdown with radar & bar charts
+- Top contributors leaderboard
+- System statistics panel
+
+### Carbon Tracking
+- Log corporate greenhouse gas emissions per department
+- Auto-estimates CO₂ based on source type (electricity, fuel, travel, waste)
+- Filter by department and source; delete records
+- Running totals and volume statistics
+
+### CSR & Social
+- Create and view corporate social responsibility activities
+- Category, location, date range, and points reward per activity
+- Status tracking (ACTIVE / completed)
+
+### Governance (Policies & Compliance)
+- Publish ESG policies and acknowledge them per employee
+- Log compliance issues with department assignment and due date
+- Mark issues resolved; auto-notification sent to assignee
+- Overdue issue detection with visual alerts
+
+### Gamification & Rewards
+- Employee XP leaderboard sorted by experience
+- Badge catalog with unlock status per employee
+- Badge auto-evaluation endpoint (award based on XP threshold)
+- Rewards catalog with point-based redemption
+- Per-employee notification feed (read / delete)
+
+---
+
+## 🚧 Partially Implemented
+
+| Feature | Status |
+|---|---|
+| User authentication / login | Not implemented — simulates first employee as current user |
+| Report generation | Backend service exists; no dedicated frontend page |
+| Challenge management UI | Backend API exists; no frontend page |
+| Audit trails | Backend API exists; no frontend page |
+
+---
+
+## 🔮 Future Scope
+
+- Real authentication with JWT sessions
+- Report export (PDF/CSV)
+- Dark mode toggle
+- Multi-tenant organization support
+- Email notifications on compliance alerts
+- Mobile-responsive breakpoints for tablet/phone
+
+---
+
+## Known Limitations
+
+- **Current user is simulated** as `employees[0]` — no real login flow
+- **DepartmentScore table** is pre-seeded; not dynamically recalculated on every carbon transaction (ESG scores from `/dashboard/esg` are formula-computed from live data)
+- SQLite used for development; PostgreSQL schema-compatible
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | React 19, Vite, TypeScript, Tailwind CSS |
+| State Management | TanStack Query v5 |
+| Charts | Recharts |
+| Icons | Lucide React |
+| Backend | Node.js, Express 5, TypeScript |
+| ORM | Prisma |
+| Database | SQLite (dev) / PostgreSQL (prod) |
+
+---
+
+## Quick Start
+
+### Backend
+
+```bash
+cd backend
+npm install
+# Configure .env: DATABASE_URL="file:./prisma/dev.db"
+npx prisma db push
+npm run db:seed
+npm run dev            # Runs on http://localhost:3000
+```
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev            # Runs on http://localhost:5173
+```
+
+The frontend proxies `/api/*` → `http://localhost:3000` via Vite dev server.
+
+### Verify Backend
+
+```bash
+cd backend
+node verify.js         # Runs API smoke tests
+```
+
+---
+
+## Demo Flow (for Judges)
+
+1. **Dashboard** — View overall ESG scores, department breakdown radar chart, top contributors
+2. **Carbon Tracking** — Click "Log Emission", select department, enter source & quantity (CO₂ auto-estimated), submit
+3. **CSR & Social** — Click "Create Activity", fill out event details, view card grid
+4. **Governance** — Publish a policy, acknowledge it, log a compliance issue with due date, mark resolved
+5. **Gamification** — Click "Evaluate My Badges" to auto-award badges based on XP; redeem rewards; view notifications
 
 ---
 
 ## Directory Layout
 
-*   `backend/` - Complete Express + Prisma backend codebase.
-*   `frontend/` - React frontend application (TODO).
-*   `AGENTS.md` - Technical architecture guidelines and AI execution instructions.
-*   `API_SPEC.md` - Documented API routing, payloads, and scoring formulas.
-*   `TASKS.md` - Execution roadmap for remaining P0, P1, and P2 tasks.
-*   `DEFINITION_OF_DONE.md` - Checklist for merge validation.
-*   `README_EXECUTION.md` - Step-by-step developer onboarding and execution instructions.
-
----
-
-## Quick Start (Backend)
-
-### Prerequisites
-*   Node.js 18+
-*   PostgreSQL database
-
-### Running Locally
-1. Navigate to the backend directory:
-   ```bash
-   cd backend
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Configure your database URL in a `.env` file:
-   ```env
-   DATABASE_URL="postgresql://user:password@localhost:5432/echosphere"
-   ```
-4. Run migrations:
-   ```bash
-   npx prisma db push
-   ```
-5. Seed the database:
-   ```bash
-   npm run db:seed
-   ```
-6. Start the development server:
-   ```bash
-   npm run dev
-   ```
-
-The backend server runs on `http://localhost:3000`. You can verify endpoints by running the verification suite:
-```bash
-node verify.js
+```
+echosphere/
+├── backend/           Express + Prisma backend
+│   ├── src/
+│   │   ├── controllers/
+│   │   ├── services/
+│   │   ├── routes/
+│   │   └── server.ts
+│   ├── prisma/
+│   │   ├── schema.prisma
+│   │   └── seed.ts
+│   └── verify.js      API smoke test suite
+├── frontend/          React + Vite frontend
+│   ├── src/
+│   │   ├── pages/     Dashboard, CarbonTracking, CSR, Governance, Rewards
+│   │   ├── components/
+│   │   └── lib/
+│   └── index.html
+└── docs/
+    ├── API_SPEC.md
+    ├── DESIGN_SYSTEM.md
+    ├── TASKS.md
+    └── AGENTS.md
 ```

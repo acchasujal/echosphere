@@ -1,4 +1,6 @@
 import express from 'express';
+// @ts-ignore -- cors types not installed; package is present
+import cors from 'cors';
 import { handleError } from './controllers/employee.controller.js';
 import badgeRoutes from './routes/badge.routes.js';
 import carbonTransactionRoutes from './routes/carbonTransaction.routes.js';
@@ -17,6 +19,7 @@ import auditRoutes from './routes/audit.routes.js';
 
 const app = express();
 
+app.use(cors({ origin: ['http://localhost:5173', 'http://localhost:4173'] }));
 app.use(express.json());
 
 app.get('/health', (_req, res) => {

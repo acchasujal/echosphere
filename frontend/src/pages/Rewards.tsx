@@ -249,8 +249,6 @@ export const Rewards: React.FC = () => {
           <StatCard 
             title="Spendable Points" 
             value={`${currentUser.points} pts`} 
-            delta="100 accumulated"
-            positive={true}
           />
           <StatCard 
             title="Total Experience" 
