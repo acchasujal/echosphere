@@ -124,6 +124,17 @@ export const Dashboard: React.FC = () => {
     refetchDashboard();
   };
 
+  const displayOverall = esgScores?.overallScore ?? data?.overallScore ?? 0;
+  const displayEnv = esgScores?.environmentalScore ?? data?.environmentalScore ?? 0;
+  const displaySocial = esgScores?.socialScore ?? data?.socialScore ?? 0;
+  const displayGov = esgScores?.governanceScore ?? data?.governanceScore ?? 0;
+
+  // Animate values (must be called unconditionally before early returns)
+  const animatedOverall = useCountUp(displayOverall);
+  const animatedEnv = useCountUp(displayEnv);
+  const animatedSocial = useCountUp(displaySocial);
+  const animatedGov = useCountUp(displayGov);
+
   if (isLoading) {
     return (
       <div className="space-y-6">
@@ -160,18 +171,6 @@ export const Dashboard: React.FC = () => {
       />
     );
   }
-
-  // Use dynamic ESG scores computed by backend formulas, fallback to department averages
-  const displayOverall = esgScores?.overallScore ?? data.overallScore;
-  const displayEnv = esgScores?.environmentalScore ?? data.environmentalScore;
-  const displaySocial = esgScores?.socialScore ?? data.socialScore;
-  const displayGov = esgScores?.governanceScore ?? data.governanceScore;
-
-  // Animate values
-  const animatedOverall = useCountUp(displayOverall);
-  const animatedEnv = useCountUp(displayEnv);
-  const animatedSocial = useCountUp(displaySocial);
-  const animatedGov = useCountUp(displayGov);
 
   // Format scores for Radar & Bar Chart
   const chartData = [
