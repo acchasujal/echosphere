@@ -2,7 +2,7 @@
 
 > **Transform Sustainability into Measurable Action.**
 
-EcoSphere is a full-stack Enterprise ESG (Environmental, Social & Governance) management platform built for the **Odoo Grand Finale Hackathon 2026**. It enables organizations to monitor sustainability performance, manage ESG operations, engage employees through gamification, and gain AI-powered insights from a unified executive dashboard.
+EcoSphere is a full-stack Enterprise ESG (Environmental, Social & Governance) management platform built for the **Odoo Hackathon 2026**. It enables organizations to monitor sustainability performance, manage ESG operations, engage employees through gamification, and gain AI-powered insights from a unified executive dashboard.
 
 Unlike traditional ESG tracking tools that operate in silos, EcoSphere integrates Environmental, Social, Governance, Compliance, Audits, Challenges, Rewards, and AI-powered analytics into a single enterprise platform.
 
