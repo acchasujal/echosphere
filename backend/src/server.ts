@@ -11,6 +11,9 @@ import rewardRoutes from './routes/reward.routes.js';
 import notificationRoutes from './routes/notification.routes.js';
 import reportRoutes from './routes/report.routes.js';
 import csrRoutes from './routes/csr.routes.js';
+import policyRoutes from './routes/policy.routes.js';
+import policyAcknowledgementRoutes from './routes/policyAcknowledgement.routes.js';
+import auditRoutes from './routes/audit.routes.js';
 
 const app = express();
 
@@ -34,6 +37,9 @@ app.use('/badges', badgeRoutes);
 app.use('/notifications', notificationRoutes);
 app.use('/reports', reportRoutes);
 app.use('/csr', csrRoutes);
+app.use('/policies', policyRoutes);
+app.use('/policy-acknowledgements', policyAcknowledgementRoutes);
+app.use('/audits', auditRoutes);
 
 app.use((_req, res) => {
   res.status(404).json({
