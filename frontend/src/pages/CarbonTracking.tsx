@@ -47,6 +47,26 @@ export const CarbonTracking: React.FC = () => {
   const [deptFilter, setDeptFilter] = useState('');
   const [sourceFilter, setSourceFilter] = useState('');
 
+  // Auto-calculate estimated CO2 amount based on source and quantity
+  React.useEffect(() => {
+    const qVal = parseFloat(quantity);
+    if (isNaN(qVal) || qVal <= 0) return;
+    
+    let factor = 0.5; // default factor (kg CO2 per unit)
+    const srcLower = source.toLowerCase();
+    if (srcLower.includes('electricity') || srcLower.includes('power')) {
+      factor = 0.45; // grid intensity
+    } else if (srcLower.includes('gas') || srcLower.includes('fuel') || srcLower.includes('petrol') || srcLower.includes('diesel')) {
+      factor = 2.31; // liquid fuel
+    } else if (srcLower.includes('travel') || srcLower.includes('flight') || srcLower.includes('car') || srcLower.includes('mile')) {
+      factor = 0.18; // travel average
+    } else if (srcLower.includes('waste') || srcLower.includes('trash')) {
+      factor = 0.9;
+    }
+    
+    setCo2Amount((qVal * factor).toFixed(1));
+  }, [source, quantity]);
+
   // 1. Fetch transactions
   const { data: transactions = [], isLoading, error } = useQuery<CarbonTransaction[]>({
     queryKey: ['carbon-transactions'],

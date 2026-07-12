@@ -224,11 +224,15 @@ export const Governance: React.FC = () => {
     },
     { 
       header: 'Due Date', 
-      accessor: (row: ComplianceIssue) => (
-        <span className="text-xs text-muted-foreground">
-          {new Date(row.dueDate).toLocaleDateString()}
-        </span>
-      ) 
+      accessor: (row: ComplianceIssue) => {
+        const isOverdue = new Date(row.dueDate) < new Date() && row.status !== 'RESOLVED';
+        return (
+          <span className={`text-xs flex items-center gap-1 ${isOverdue ? 'text-destructive font-semibold' : 'text-muted-foreground'}`}>
+            {isOverdue && <AlertTriangle className="w-3.5 h-3.5 shrink-0 animate-pulse" />}
+            {new Date(row.dueDate).toLocaleDateString()}
+          </span>
+        );
+      } 
     },
     { 
       header: 'Status', 
