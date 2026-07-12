@@ -107,7 +107,7 @@ export async function handleGetEmployees(_req: Request, res: Response, next: Nex
 
 export async function handleGetEmployeeById(req: Request, res: Response, next: NextFunction) {
   try {
-    const id = parseEmployeeId(req.params.id);
+    const id = parseEmployeeId(req.params.id as string);
     const employee = await getEmployeeById(id);
 
     res.status(200).json({
@@ -158,7 +158,7 @@ export async function handleCreateEmployee(req: Request, res: Response, next: Ne
 
 export async function handleUpdateEmployee(req: Request, res: Response, next: NextFunction) {
   try {
-    const id = parseEmployeeId(req.params.id);
+    const id = parseEmployeeId(req.params.id as string);
     const body = req.body as EmployeeBody;
 
     const data: Record<string, string | number> = {};
@@ -217,7 +217,7 @@ export async function handleUpdateEmployee(req: Request, res: Response, next: Ne
 
 export async function handleDeleteEmployee(req: Request, res: Response, next: NextFunction) {
   try {
-    const id = parseEmployeeId(req.params.id);
+    const id = parseEmployeeId(req.params.id as string);
     const employee = await deleteEmployee(id);
 
     res.status(200).json({

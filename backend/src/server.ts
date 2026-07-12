@@ -1,5 +1,6 @@
 import express from 'express';
 import { handleError } from './controllers/employee.controller.js';
+import challengeRoutes from './routes/challenge.routes.js';
 import employeeRoutes from './routes/employee.routes.js';
 
 const app = express();
@@ -14,6 +15,7 @@ app.get('/health', (_req, res) => {
 });
 
 app.use('/employees', employeeRoutes);
+app.use('/challenges', challengeRoutes);
 
 app.use((_req, res) => {
   res.status(404).json({
