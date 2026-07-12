@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AppShell } from './components/layout/AppShell';
@@ -9,6 +8,7 @@ import { Dashboard } from './pages/Dashboard';
 import { CarbonTracking } from './pages/CarbonTracking';
 import { CSR } from './pages/CSR';
 import { Governance } from './pages/Governance';
+import { Rewards } from './pages/Rewards';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,14 +19,6 @@ const queryClient = new QueryClient({
   },
 });
 
-const ComingSoon: React.FC<{ title: string; description: string }> = ({ title, description }) => (
-  <div className="py-12">
-    <EmptyState
-      title={title}
-      description={description}
-    />
-  </div>
-);
 
 function App() {
   return (
@@ -40,15 +32,7 @@ function App() {
                 <Route path="/carbon" element={<CarbonTracking />} />
                 <Route path="/csr" element={<CSR />} />
                 <Route path="/policies" element={<Governance />} />
-                <Route 
-                  path="/rewards" 
-                  element={
-                    <ComingSoon 
-                      title="Gamification Coming Soon" 
-                      description="Employee badges, rewards catalog, and points redemption store will be implemented in the next phase." 
-                    />
-                  } 
-                />
+                <Route path="/rewards" element={<Rewards />} />
                 <Route 
                   path="*" 
                   element={
