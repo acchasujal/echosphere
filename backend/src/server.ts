@@ -1,8 +1,11 @@
 import express from 'express';
 import { handleError } from './controllers/employee.controller.js';
+import badgeRoutes from './routes/badge.routes.js';
+import carbonTransactionRoutes from './routes/carbonTransaction.routes.js';
 import dashboardRoutes from './routes/dashboard.routes.js';
 import challengeRoutes from './routes/challenge.routes.js';
 import employeeRoutes from './routes/employee.routes.js';
+import participationRoutes from './routes/participation.routes.js';
 import rewardRoutes from './routes/reward.routes.js';
 
 const app = express();
@@ -20,6 +23,9 @@ app.use('/employees', employeeRoutes);
 app.use('/challenges', challengeRoutes);
 app.use('/rewards', rewardRoutes);
 app.use('/dashboard', dashboardRoutes);
+app.use('/carbon-transactions', carbonTransactionRoutes);
+app.use('/participations', participationRoutes);
+app.use('/badges', badgeRoutes);
 
 app.use((_req, res) => {
   res.status(404).json({
