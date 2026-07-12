@@ -34,6 +34,7 @@ app.use('/employees', employeeRoutes);
 app.use('/challenges', challengeRoutes);
 app.use('/rewards', rewardRoutes);
 app.use('/dashboard/insights', dashboardInsightsRoutes);
+app.use('/dashboard-insights', dashboardInsightsRoutes);
 app.use('/dashboard', dashboardRoutes);
 app.use('/carbon-transactions', carbonTransactionRoutes);
 app.use('/compliance-issues', complianceIssueRoutes);
