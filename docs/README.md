@@ -1,154 +1,420 @@
-# EcoSphere — ESG Management & Gamification Platform
+# 🌱 EcoSphere — AI-Powered Enterprise ESG Management Platform
 
-EcoSphere is a full-stack ESG (Environmental, Social, Governance) management platform built for the **Odoo Grand Finale Hackathon 2026**. It helps organizations monitor corporate sustainability, track carbon emissions, incentivize employee participation through gamification, and govern policy compliance — all in a single polished SaaS interface.
+> **Transform Sustainability into Measurable Action.**
 
-> ⚡ **AI-Assisted Development** — This project was built with AI-assisted code generation and reviewed by the team for correctness and design quality.
+EcoSphere is a full-stack Enterprise ESG (Environmental, Social & Governance) management platform built for the **Odoo Grand Finale Hackathon 2026**. It enables organizations to monitor sustainability performance, manage ESG operations, engage employees through gamification, and gain AI-powered insights from a unified executive dashboard.
 
----
+Unlike traditional ESG tracking tools that operate in silos, EcoSphere integrates Environmental, Social, Governance, Compliance, Audits, Challenges, Rewards, and AI-powered analytics into a single enterprise platform.
 
-## ✅ Implemented Features
-
-### Dashboard
-- Real-time ESG score computation (Environmental, Social, Governance)
-- Department-level ESG breakdown with radar & bar charts
-- Top contributors leaderboard
-- System statistics panel
-
-### Carbon Tracking
-- Log corporate greenhouse gas emissions per department
-- Auto-estimates CO₂ based on source type (electricity, fuel, travel, waste)
-- Filter by department and source; delete records
-- Running totals and volume statistics
-
-### CSR & Social
-- Create and view corporate social responsibility activities
-- Category, location, date range, and points reward per activity
-- Status tracking (ACTIVE / completed)
-
-### Governance (Policies & Compliance)
-- Publish ESG policies and acknowledge them per employee
-- Log compliance issues with department assignment and due date
-- Mark issues resolved; auto-notification sent to assignee
-- Overdue issue detection with visual alerts
-
-### Gamification & Rewards
-- Employee XP leaderboard sorted by experience
-- Badge catalog with unlock status per employee
-- Badge auto-evaluation endpoint (award based on XP threshold)
-- Rewards catalog with point-based redemption
-- Per-employee notification feed (read / delete)
+> **AI-Assisted Development:** AI was used to accelerate development, architecture, UI generation, documentation, and code review. All generated code was integrated, reviewed, tested, and refined by the team.
 
 ---
 
-## 🚧 Partially Implemented
+# ✨ Key Features
 
-| Feature | Status |
-|---|---|
-| User authentication / login | Not implemented — simulates first employee as current user |
-| Report generation | Backend service exists; no dedicated frontend page |
-| Challenge management UI | Backend API exists; no frontend page |
-| Audit trails | Backend API exists; no frontend page |
+## 📊 Executive ESG Dashboard
 
----
+The central command center for organizational sustainability.
 
-## 🔮 Future Scope
+Features:
 
-- Real authentication with JWT sessions
-- Report export (PDF/CSV)
-- Dark mode toggle
-- Multi-tenant organization support
-- Email notifications on compliance alerts
-- Mobile-responsive breakpoints for tablet/phone
+- Live Environmental, Social & Governance Scores
+- Overall ESG Score
+- Department-wise ESG comparison
+- Interactive charts & visualizations
+- Top performing employees
+- Recent organizational activity
+- AI-generated sustainability insights
+- Executive KPI overview
 
 ---
 
-## Known Limitations
+## 🌿 Environmental Management
 
-- **Current user is simulated** as `employees[0]` — no real login flow
-- **DepartmentScore table** is pre-seeded; not dynamically recalculated on every carbon transaction (ESG scores from `/dashboard/esg` are formula-computed from live data)
-- SQLite used for development; PostgreSQL schema-compatible
+Track and reduce organizational environmental impact.
 
----
+Features:
 
-## Tech Stack
-
-| Layer | Technology |
-|---|---|
-| Frontend | React 19, Vite, TypeScript, Tailwind CSS |
-| State Management | TanStack Query v5 |
-| Charts | Recharts |
-| Icons | Lucide React |
-| Backend | Node.js, Express 5, TypeScript |
-| ORM | Prisma |
-| Database | SQLite (dev) / PostgreSQL (prod) |
+- Carbon transaction logging
+- Automatic CO₂ estimation
+- Department-wise emission tracking
+- Environmental performance scoring
+- Historical carbon records
+- Environmental goals monitoring
 
 ---
 
-## Quick Start
+## ❤️ CSR & Social Engagement
 
-### Backend
+Encourage employee participation in sustainability initiatives.
+
+Features:
+
+- CSR activity management
+- Employee participation tracking
+- CSR approval workflow
+- Points-based engagement
+- Social ESG scoring
+
+---
+
+## 🏛 Governance & Compliance
+
+Improve organizational governance and accountability.
+
+Features:
+
+- ESG Policy management
+- Policy acknowledgements
+- Compliance issue tracking
+- Resolution workflow
+- Governance scoring
+- Audit scheduling & monitoring
+
+---
+
+## 🎯 Sustainability Challenges
+
+Promote sustainability through gamification.
+
+Features:
+
+- Sustainability challenge management
+- Employee participation
+- Progress tracking
+- Department engagement
+
+---
+
+## 🏆 Gamification
+
+Increase employee engagement through rewards.
+
+Features:
+
+- XP system
+- Leaderboard
+- Achievement badges
+- Rewards catalogue
+- Reward redemption
+- Employee recognition
+
+---
+
+## 🤖 AI ESG Insights
+
+AI-powered executive assistance.
+
+Features:
+
+- ESG performance summary
+- Sustainability recommendations
+- Risk identification
+- Organizational priorities
+- Executive decision support
+
+---
+
+## ⚙️ Administration
+
+Manage organizational structure and configuration.
+
+Features:
+
+- Department registry
+- Organization settings
+- ESG configuration
+- Employee management foundation
+
+---
+
+# 📈 ESG Scoring
+
+EcoSphere computes ESG scores using live organizational data.
+
+### Environmental
+
+Calculated from:
+
+- Carbon emissions
+- Department emission intensity
+- Environmental activities
+
+### Social
+
+Calculated from:
+
+- CSR participation
+- Employee engagement
+- Sustainability initiatives
+
+### Governance
+
+Calculated from:
+
+- Policy acknowledgements
+- Compliance status
+- Governance participation
+
+These combine into an overall ESG score displayed throughout the platform.
+
+---
+
+# 🏗 Architecture
+
+```
+React + Vite + TypeScript
+        │
+React Query + Axios
+        │
+────────────────────────────
+Express.js API
+Controllers
+Services
+Prisma ORM
+────────────────────────────
+SQLite Database
+```
+
+---
+
+# 🛠 Technology Stack
+
+## Frontend
+
+- React 19
+- Vite
+- TypeScript
+- Tailwind CSS
+- TanStack Query
+- React Router
+- Axios
+- Recharts
+- Lucide React
+
+## Backend
+
+- Node.js
+- Express.js
+- TypeScript
+- Prisma ORM
+
+## Database
+
+- SQLite (Development)
+- PostgreSQL Compatible Schema
+
+## AI
+
+- Google Gemini
+- AI-generated ESG Insights
+
+---
+
+# 📂 Project Modules
+
+| Module | Status |
+|---------|--------|
+| Executive Dashboard | ✅ Complete |
+| Carbon Tracking | ✅ Complete |
+| CSR Management | ✅ Complete |
+| Governance | ✅ Complete |
+| Compliance Issues | ✅ Complete |
+| Audit Management | ✅ Complete |
+| Sustainability Challenges | ✅ Complete |
+| Gamification | ✅ Complete |
+| Rewards | ✅ Complete |
+| Notifications | ✅ Complete |
+| AI ESG Insights | ✅ Complete |
+| Settings | ✅ Complete |
+
+---
+
+# 📊 Demo Dataset
+
+The platform includes a realistic enterprise dataset representing a medium-sized organization.
+
+Seeded data includes:
+
+- 10 Departments
+- 45+ Employees
+- 100+ Carbon Transactions
+- CSR Activities
+- ESG Policies
+- Policy Acknowledgements
+- Compliance Issues
+- Audits
+- Sustainability Challenges
+- Employee Participations
+- Badges
+- Rewards
+- Notifications
+
+This enables every dashboard, chart, leaderboard, and management page to demonstrate realistic enterprise workflows.
+
+---
+
+# 🚀 Quick Start
+
+## Backend
 
 ```bash
 cd backend
+
 npm install
-# Configure .env: DATABASE_URL="file:./prisma/dev.db"
+
 npx prisma db push
+
 npm run db:seed
-npm run dev            # Runs on http://localhost:3000
+
+npm run dev
 ```
 
-### Frontend
+Runs on:
+
+```
+http://localhost:3000
+```
+
+---
+
+## Frontend
 
 ```bash
 cd frontend
+
 npm install
-npm run dev            # Runs on http://localhost:5173
+
+npm run dev
 ```
 
-The frontend proxies `/api/*` → `http://localhost:3000` via Vite dev server.
+Runs on:
 
-### Verify Backend
+```
+http://localhost:5173
+```
+
+The frontend communicates with the backend through the Vite proxy.
+
+---
+
+## Verify Backend
 
 ```bash
 cd backend
-node verify.js         # Runs API smoke tests
+
+node verify.js
 ```
 
----
-
-## Demo Flow (for Judges)
-
-1. **Dashboard** — View overall ESG scores, department breakdown radar chart, top contributors
-2. **Carbon Tracking** — Click "Log Emission", select department, enter source & quantity (CO₂ auto-estimated), submit
-3. **CSR & Social** — Click "Create Activity", fill out event details, view card grid
-4. **Governance** — Publish a policy, acknowledge it, log a compliance issue with due date, mark resolved
-5. **Gamification** — Click "Evaluate My Badges" to auto-award badges based on XP; redeem rewards; view notifications
+Runs the backend smoke tests to verify API functionality.
 
 ---
 
-## Directory Layout
+# 🎬 Suggested Demo Flow
+
+### 1. Executive Dashboard
+
+- Overall ESG score
+- AI Insights
+- Department comparison
+- KPI cards
+
+### 2. Carbon Tracking
+
+- Log emissions
+- View history
+- Department statistics
+
+### 3. CSR
+
+- Create CSR activity
+- Track participation
+- Demonstrate social engagement
+
+### 4. Governance
+
+- Publish policy
+- Record acknowledgement
+- Create compliance issue
+- Schedule audit
+
+### 5. Challenges
+
+- Browse sustainability challenges
+- Join challenge
+- Track participation
+
+### 6. Gamification
+
+- Leaderboard
+- Badges
+- Rewards redemption
+
+### 7. Settings
+
+- Organization configuration
+- Department management
+
+---
+
+# 📁 Repository Structure
 
 ```
 echosphere/
-├── backend/           Express + Prisma backend
-│   ├── src/
-│   │   ├── controllers/
-│   │   ├── services/
-│   │   ├── routes/
-│   │   └── server.ts
+
+├── backend/
 │   ├── prisma/
 │   │   ├── schema.prisma
 │   │   └── seed.ts
-│   └── verify.js      API smoke test suite
-├── frontend/          React + Vite frontend
 │   ├── src/
-│   │   ├── pages/     Dashboard, CarbonTracking, CSR, Governance, Rewards
+│   │   ├── controllers/
+│   │   ├── middleware/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   └── server.ts
+│   └── verify.js
+│
+├── frontend/
+│   ├── src/
 │   │   ├── components/
-│   │   └── lib/
+│   │   ├── hooks/
+│   │   ├── lib/
+│   │   ├── pages/
+│   │   └── App.tsx
 │   └── index.html
+│
 └── docs/
+    ├── AGENTS.md
     ├── API_SPEC.md
     ├── DESIGN_SYSTEM.md
     ├── TASKS.md
-    └── AGENTS.md
+    └── README.md
 ```
+
+---
+
+# ⚠️ Current Limitations
+
+To stay within the hackathon timeline, a few production features remain outside the MVP:
+
+- Authentication is simulated using a demo employee context.
+- Email notifications are not implemented.
+- Multi-tenant organization support is not included.
+- Report export (PDF/Excel) is planned for future iterations.
+- Historical analytics are limited to the seeded demonstration dataset.
+
+These limitations do not affect the core ESG workflow demonstrated by the platform.
+
+---
+
+# 👥 Team
+
+**Team BRUH**
+
+Built for the **Odoo Hackathon 2026**
+
+---
+
+## Vision
+
+> *"Making sustainability measurable, engaging, and actionable through intelligent enterprise software."*
