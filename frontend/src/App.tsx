@@ -7,6 +7,7 @@ import { ErrorBoundary } from './components/ui/ErrorBoundary';
 import { EmptyState } from './components/ui/Feedback';
 import { Dashboard } from './pages/Dashboard';
 import { CarbonTracking } from './pages/CarbonTracking';
+import { CSR } from './pages/CSR';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -36,15 +37,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/carbon" element={<CarbonTracking />} />
-                <Route 
-                  path="/csr" 
-                  element={
-                    <ComingSoon 
-                      title="CSR & Social Coming Soon" 
-                      description="Corporate Social Responsibility event tracking, management, and signups will be implemented in the next phase." 
-                    />
-                  } 
-                />
+                <Route path="/csr" element={<CSR />} />
                 <Route 
                   path="/policies" 
                   element={
