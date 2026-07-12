@@ -3,6 +3,7 @@ import { handleError } from './controllers/employee.controller.js';
 import badgeRoutes from './routes/badge.routes.js';
 import carbonTransactionRoutes from './routes/carbonTransaction.routes.js';
 import complianceIssueRoutes from './routes/complianceIssue.routes.js';
+import dashboardInsightsRoutes from './routes/dashboardInsights.routes.js';
 import dashboardRoutes from './routes/dashboard.routes.js';
 import challengeRoutes from './routes/challenge.routes.js';
 import employeeRoutes from './routes/employee.routes.js';
@@ -29,6 +30,7 @@ app.get('/health', (_req, res) => {
 app.use('/employees', employeeRoutes);
 app.use('/challenges', challengeRoutes);
 app.use('/rewards', rewardRoutes);
+app.use('/dashboard/insights', dashboardInsightsRoutes);
 app.use('/dashboard', dashboardRoutes);
 app.use('/carbon-transactions', carbonTransactionRoutes);
 app.use('/compliance-issues', complianceIssueRoutes);
