@@ -35,6 +35,8 @@ model Employee {
   badges         EmployeeBadge[]
   redemptions    RewardRedemption[]
   notifications  Notification[]
+  csrParticipations CSRParticipation[]
+  policyAcknowledgements PolicyAcknowledgement[]
 }
 
 model Challenge {
@@ -49,6 +51,24 @@ model Challenge {
   participations Participation[]
 }
 
+model CSRActivity {
+  id Int @id @default(autoincrement())
+
+  title       String
+  description String
+  category    String
+  location    String?
+
+  startDate DateTime
+  endDate   DateTime
+
+  status String
+
+  pointsReward Int @default(0)
+
+  participations CSRParticipation[]
+}
+
 model Participation {
   id Int @id @default(autoincrement())
 
@@ -61,6 +81,22 @@ model Participation {
 
   employee  Employee  @relation(fields: [employeeId], references: [id])
   challenge Challenge @relation(fields: [challengeId], references: [id])
+}
+
+model CSRParticipation {
+  id Int @id @default(autoincrement())
+
+  employeeId    Int
+  csrActivityId Int
+
+  proof      String?
+  status     String
+  pointsEarned Int @default(0)
+
+  completedAt DateTime?
+
+  employee    Employee    @relation(fields: [employeeId], references: [id])
+  csrActivity CSRActivity @relation(fields: [csrActivityId], references: [id])
 }
 
 model Reward {
@@ -161,4 +197,36 @@ model Notification {
   createdAt DateTime @default(now())
 
   employee Employee @relation(fields: [employeeId], references: [id])
+}
+
+model ESGPolicy {
+  id Int @id @default(autoincrement())
+
+  title       String
+  description String
+  status      String
+
+  acknowledgements PolicyAcknowledgement[]
+}
+
+model PolicyAcknowledgement {
+  id Int @id @default(autoincrement())
+
+  employeeId Int
+  policyId   Int
+
+  acknowledgedAt DateTime @default(now())
+
+  employee Employee  @relation(fields: [employeeId], references: [id])
+  policy   ESGPolicy @relation(fields: [policyId], references: [id])
+}
+
+model Audit {
+  id Int @id @default(autoincrement())
+
+  title       String
+  description String
+
+  auditDate DateTime
+  status    String
 }

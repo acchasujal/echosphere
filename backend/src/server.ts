@@ -10,6 +10,7 @@ import participationRoutes from './routes/participation.routes.js';
 import rewardRoutes from './routes/reward.routes.js';
 import notificationRoutes from './routes/notification.routes.js';
 import reportRoutes from './routes/report.routes.js';
+import csrRoutes from './routes/csr.routes.js';
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use('/participations', participationRoutes);
 app.use('/badges', badgeRoutes);
 app.use('/notifications', notificationRoutes);
 app.use('/reports', reportRoutes);
+app.use('/csr', csrRoutes);
 
 app.use((_req, res) => {
   res.status(404).json({
