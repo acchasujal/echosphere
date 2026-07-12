@@ -70,8 +70,15 @@ interface DashboardData {
   };
 }
 
+interface EsgScores {
+  environmentalScore: number;
+  socialScore: number;
+  governanceScore: number;
+  overallScore: number;
+}
+
 export const Dashboard: React.FC = () => {
-  const { data, isLoading, error, refetch } = useQuery<DashboardData>({
+  const { data, isLoading: isLoadingDashboard, error: errorDashboard, refetch: refetchDashboard } = useQuery<DashboardData>({
     queryKey: ['dashboard'],
     queryFn: async () => {
       // In Express backend, /dashboard is unwrapped
@@ -79,6 +86,20 @@ export const Dashboard: React.FC = () => {
       return response.data;
     },
   });
+
+  const { data: esgScores, isLoading: isLoadingEsg } = useQuery<EsgScores>({
+    queryKey: ['esg-scores'],
+    queryFn: async () => {
+      const response = await api.get('/dashboard/esg');
+      return response.data.data || response.data;
+    },
+  });
+
+  const isLoading = isLoadingDashboard || isLoadingEsg;
+  const error = errorDashboard;
+  const refetch = () => {
+    refetchDashboard();
+  };
 
   if (isLoading) {
     return (
@@ -117,11 +138,17 @@ export const Dashboard: React.FC = () => {
     );
   }
 
+  // Use dynamic ESG scores computed by backend formulas, fallback to department averages
+  const displayOverall = esgScores?.overallScore ?? data.overallScore;
+  const displayEnv = esgScores?.environmentalScore ?? data.environmentalScore;
+  const displaySocial = esgScores?.socialScore ?? data.socialScore;
+  const displayGov = esgScores?.governanceScore ?? data.governanceScore;
+
   // Format scores for Radar & Bar Chart
   const chartData = [
-    { subject: 'Environmental', score: Math.round(data.environmentalScore) },
-    { subject: 'Social', score: Math.round(data.socialScore) },
-    { subject: 'Governance', score: Math.round(data.governanceScore) },
+    { subject: 'Environmental', score: Math.round(displayEnv) },
+    { subject: 'Social', score: Math.round(displaySocial) },
+    { subject: 'Governance', score: Math.round(displayGov) },
   ];
 
   const departmentScoresData = data.departmentScores.map((score) => ({
@@ -172,25 +199,25 @@ export const Dashboard: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard 
           title="Overall ESG Score" 
-          value={data.overallScore.toFixed(1)} 
+          value={displayOverall.toFixed(1)} 
           delta="1.2" 
           positive={true} 
         />
         <StatCard 
           title="Environmental (E)" 
-          value={data.environmentalScore.toFixed(1)} 
+          value={displayEnv.toFixed(1)} 
           delta="0.5" 
           positive={true} 
         />
         <StatCard 
           title="Social (S)" 
-          value={data.socialScore.toFixed(1)} 
+          value={displaySocial.toFixed(1)} 
           delta="2.1" 
           positive={true} 
         />
         <StatCard 
           title="Governance (G)" 
-          value={data.governanceScore.toFixed(1)} 
+          value={displayGov.toFixed(1)} 
           delta="0.0" 
           positive={true} 
         />
