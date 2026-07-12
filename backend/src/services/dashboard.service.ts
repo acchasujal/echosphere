@@ -99,7 +99,7 @@ export async function getEsgScores() {
     prisma.employeeBadge.count(),
     prisma.participation.count(),
     prisma.complianceIssue.count({
-      where: { status: { not: 'resolved' } },
+      where: { status: { notIn: ['RESOLVED', 'resolved'] } },
     }),
     prisma.complianceIssue.count(),
   ]);

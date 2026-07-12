@@ -2,12 +2,14 @@ import express from 'express';
 import { handleError } from './controllers/employee.controller.js';
 import badgeRoutes from './routes/badge.routes.js';
 import carbonTransactionRoutes from './routes/carbonTransaction.routes.js';
+import complianceIssueRoutes from './routes/complianceIssue.routes.js';
 import dashboardRoutes from './routes/dashboard.routes.js';
 import challengeRoutes from './routes/challenge.routes.js';
 import employeeRoutes from './routes/employee.routes.js';
 import participationRoutes from './routes/participation.routes.js';
 import rewardRoutes from './routes/reward.routes.js';
 import notificationRoutes from './routes/notification.routes.js';
+import reportRoutes from './routes/report.routes.js';
 
 const app = express();
 
@@ -25,9 +27,11 @@ app.use('/challenges', challengeRoutes);
 app.use('/rewards', rewardRoutes);
 app.use('/dashboard', dashboardRoutes);
 app.use('/carbon-transactions', carbonTransactionRoutes);
+app.use('/compliance-issues', complianceIssueRoutes);
 app.use('/participations', participationRoutes);
 app.use('/badges', badgeRoutes);
 app.use('/notifications', notificationRoutes);
+app.use('/reports', reportRoutes);
 
 app.use((_req, res) => {
   res.status(404).json({
